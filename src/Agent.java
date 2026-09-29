@@ -12,8 +12,8 @@ public class Agent implements Runnable {
         for (int i = 0; i < customerPerAgent; i++) {
             try {
                 int customerID = CallCenter.takeCall();
-                Thread.sleep(ThreadLocalRandom.current().nextInt(20,200));
-                System.out.println("Agent " + ID + "finished serving cusyomer" + customerID);
+                Thread.sleep(ThreadLocalRandom.current().nextInt(50,500));
+                System.out.println("Agent " + ID + " finished serving customer " + customerID);
 
             }
             catch (Exception e) {

@@ -7,7 +7,7 @@ public class Customer implements Runnable{
 
     public void run() {
         try {
-            CallCenter.addCall(ID);
+            CallCenter.addArrival(ID);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
