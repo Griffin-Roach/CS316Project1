@@ -8,15 +8,15 @@ public class Agent implements Runnable {
     }
 
     public void run() {
-        int customerPerAgent = CallCenter.totalCustomers/CallCenter.totalAgents;
+        System.out.println("Agent " + ID + " is ready");
+
+        int customerPerAgent = CallCenter.totalCustomers / CallCenter.totalAgents;
         for (int i = 0; i < customerPerAgent; i++) {
             try {
                 int customerID = CallCenter.takeCall();
-                Thread.sleep(ThreadLocalRandom.current().nextInt(50,500));
+                Thread.sleep(ThreadLocalRandom.current().nextInt(50, 500));
                 System.out.println("Agent " + ID + " finished serving customer " + customerID);
-
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

@@ -3,18 +3,28 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Greeter implements Runnable {
 
     public void run() {
-        CallCenter.qLock.lock();
-        for (Integer ID: CallCenter.arrivalQueue) {
+        int greeted = 0;
+
+        while (greeted < CallCenter.totalCustomers) {
+            Integer id = null;
+
+            CallCenter.qLock.lock();
             try {
-                try {
-                    CallCenter.addService(ID);
-                    Thread.sleep(ThreadLocalRandom.current().nextInt(20,200));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if (!CallCenter.arrivalQueue.isEmpty()) {
+                    id = CallCenter.arrivalQueue.remove();
                 }
-                CallCenter.arrivalQueue.remove(ID);
             } finally {
                 CallCenter.qLock.unlock();
+            }
+
+            if (id != null) {
+                try {
+                    Thread.sleep(ThreadLocalRandom.current().nextInt(20, 200)); // greeting
+                    CallCenter.addService(id); // moves to service queue, signals agents
+                    greeted++;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -57,22 +57,23 @@ public class CallCenter {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        ExecutorService agentPool = Executors.newFixedThreadPool(4);
+        ExecutorService agentPool   = Executors.newFixedThreadPool(totalAgents);
         ExecutorService customerPool = Executors.newCachedThreadPool();
-        ExecutorService greeterRun = Executors.newFixedThreadPool(3);
+        ExecutorService greeterRun   = Executors.newSingleThreadExecutor();
 
-        for (int i = 1; i<=totalAgents; i++) {
-            agentPool.submit( new Agent(i));
+        greeterRun.submit(new Greeter());
+        for (int i = 1; i <= totalAgents; i++) {
+            agentPool.submit(new Agent(i));
         }
+
         for (int i = 1; i <= totalCustomers; i++) {
             customerPool.submit(new Customer(i));
-            Thread.sleep(ThreadLocalRandom.current().nextInt(20,200));
+            Thread.sleep(ThreadLocalRandom.current().nextInt(10, 100));
         }
-        for (int i = 1; i <= totalCustomers; i++){
-            greeterRun.submit(new Greeter());
-        }
-        agentPool.close();
+
+        agentPool.shutdown();
         customerPool.shutdown();
-        greeterRun.close();
+        greeterRun.shutdown();
     }
+
 }
