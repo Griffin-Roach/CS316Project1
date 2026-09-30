@@ -28,12 +28,13 @@ public class CallCenter {
 
     public static void addService(int customerID) throws InterruptedException {
         qLock.lock();
-
         try {
+            int position = serviceQueue.size() + 1;
             serviceQueue.add(customerID);
             queueNotEmpty.signal();
-            System.out.println("Customer " + customerID + " entered service queue in position ");
-        }finally {
+            System.out.println("Customer " + customerID +
+                    " entered service queue in position " + position);
+        } finally {
             qLock.unlock();
         }
     }
